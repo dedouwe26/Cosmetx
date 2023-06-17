@@ -10,7 +10,8 @@ namespace Cosmetx.Patches
 	/// <summary>
 	/// This is an example patch, made to demonstrate how to use Harmony. You should remove it if it is not used.
 	/// </summary>
-	[HarmonyPatch(typeof(CosmeticsController), nameof(CosmeticsController.GetUserCosmeticsAllowed), MethodType.Normal)]
+	[HarmonyPatch(typeof(CosmeticsController))]
+	[HarmonyPatch("GetUserCosmeticsAllowed", MethodType.Normal)]
 	class CosmeticsAllowedPatch
 	{
 		public static void Postfix(CosmeticsController __instance, ref List<CosmeticsController.CosmeticItem>[] ___itemLists, ref List<CosmeticsController.CosmeticItem> ___unlockedCosmetics, ref List<CosmeticsController.CosmeticItem> ___unlockedHats, ref List<CosmeticsController.CosmeticItem> ___unlockedFaces, ref List<CosmeticsController.CosmeticItem> ___unlockedBadges, ref List<CosmeticsController.CosmeticItem> ___unlockedHoldable)

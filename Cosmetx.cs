@@ -9,11 +9,6 @@ using UnityEngine.SceneManagement;
 
 namespace Cosmetx
 {
-    class Test {
-        private void Tast(string a) {
-            Logging.log.LogInfo("YESSSSSSSSSSSSSSSSSSSSSSSSSSSSSS "+a);
-        }
-    }
     public class HarmonyPatches
     {
         private static Harmony instance;
@@ -53,6 +48,7 @@ namespace Cosmetx
     public class Cosmetx : BaseUnityPlugin
     {   
         public static CosmeticsController cosmeticsControllerInstance;
+        public bool initialized = false;
 
         void Awake()
         {   
@@ -62,43 +58,38 @@ namespace Cosmetx
         void Start()
         {   
             // NOT HERE
-            // Utilla.Events.GameInitialized += OnGameInitialized;
+            Utilla.Events.GameInitialized += OnGameInitialized;
             SceneManager.sceneLoaded += OnSceneLoaded;
         }
 
         void OnEnable()
         {   
             Logging.log.LogInfo("Plugin is enabled");
+            Logging.log.LogMessage("Patching Now...");
+            HarmonyPatches.ApplyHarmonyPatches();
+            if (initialized)
+                cosmeticsControllerInstance.GetUserCosmeticsAllowed();
             object[] args = {"test"};
-            Traverse.Create(typeof(Test)).Method("Tast", args);
+            Traverse.Create(typeof(Test)).Method("Tast", args).GetValue();
         }
 
         void OnDisable()
         {
             HarmonyPatches.RemoveHarmonyPatches();
-            Thread.Sleep(1000);
             cosmeticsControllerInstance.GetUserCosmeticsAllowed();
         }
 
-        // void OnGameInitialized(object sender, EventArgs e)
-		// {
-			
-		// }
+        void OnGameInitialized(object sender, EventArgs e)
+		{
+            cosmeticsControllerInstance = GameObject.Find("Global/Photon Manager/CosmeticsController").GetComponent<CosmeticsController>();
+			this.initialized = true;
+		}
 
         void OnSceneLoaded(Scene s, LoadSceneMode sm)
         {   
             if (s.name == "GorillaTagSJR") {
-                Logging.log.LogMessage("Patching Now...");
-                HarmonyPatches.ApplyHarmonyPatches();
-                cosmeticsControllerInstance = GameObject.Find("Global/Photon Manager/CosmeticsController").GetComponent<CosmeticsController>();
-                Thread.Sleep(1000);
-                cosmeticsControllerInstance.GetUserCosmeticsAllowed();
-                Logging.log.LogInfo(cosmeticsControllerInstance.allCosmetics);
+                Logging.log.LogMessage(cosmeticsControllerInstance.allCosmetics);
             }
-        }
-
-        void Update()
-        {
         }
     }
 }
