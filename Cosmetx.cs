@@ -69,8 +69,6 @@ namespace Cosmetx
             HarmonyPatches.ApplyHarmonyPatches();
             if (initialized)
                 cosmeticsControllerInstance.GetUserCosmeticsAllowed();
-            object[] args = {"test"};
-            Traverse.Create(typeof(Test)).Method("Tast", args).GetValue();
         }
 
         void OnDisable()
