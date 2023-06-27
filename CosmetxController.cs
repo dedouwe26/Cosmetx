@@ -1,8 +1,8 @@
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using GorillaNetworking;
 using PlayFab;
 using PlayFab.ClientModels;
+using UnityEngine;
 
 namespace Cosmetx
 {
@@ -20,10 +20,11 @@ namespace Cosmetx
         string concatStringCosmeticsAllowed;
         bool playedInBeta;
         int currencyBalance;
+        List<CosmeticsController.CosmeticItem>[] itemLists;
 
         public CosmetxController(CosmeticsController instance, ref List<CosmeticsController.CosmeticItem> unlockedCosmetics, ref List<CosmeticsController.CosmeticItem> unlockedHats, ref List<CosmeticsController.CosmeticItem> unlockedBadges,
             ref List<CosmeticsController.CosmeticItem> unlockedFaces, ref List<CosmeticsController.CosmeticItem> unlockedHoldable, ref List<CosmeticsController.CosmeticItem> allCosmetics, ref Dictionary<string, CosmeticsController.CosmeticItem> allCosmeticsDict,
-            ref Dictionary<string, string> allCosmeticsItemIDsfromDisplayNamesDict, ref string concatStringCosmeticsAllowed, ref bool playedInBeta, ref int currencyBalance)
+            ref Dictionary<string, string> allCosmeticsItemIDsfromDisplayNamesDict, ref string concatStringCosmeticsAllowed, ref bool playedInBeta, ref int currencyBalance, ref List<CosmeticsController.CosmeticItem>[] itemLists)
         {
             this.instance = instance;
             this.unlockedCosmetics = unlockedCosmetics;
@@ -37,6 +38,7 @@ namespace Cosmetx
             this.concatStringCosmeticsAllowed = concatStringCosmeticsAllowed;
             this.playedInBeta = playedInBeta;
             this.currencyBalance = currencyBalance;
+            this.itemLists = itemLists;
         }
         public void GetUserCosmeticsAllowed()
         {
@@ -83,6 +85,7 @@ namespace Cosmetx
                                 overrideDisplayName = this.allCosmetics[searchIndex].overrideDisplayName
                             };
                             this.allCosmeticsDict[this.allCosmetics[searchIndex].itemName] = this.allCosmetics[searchIndex];
+                            // Itemlists???
                             this.allCosmeticsItemIDsfromDisplayNamesDict[this.allCosmetics[searchIndex].displayName] = this.allCosmetics[searchIndex].itemName;
                         }
                     }
@@ -156,6 +159,10 @@ namespace Cosmetx
                 }
                 this.concatStringCosmeticsAllowed += cosmeticItem.itemName;
             }
+            this.itemLists[0] = this.unlockedHats;
+            this.itemLists[1] = this.unlockedFaces;
+            this.itemLists[2] = this.unlockedBadges;
+            this.itemLists[3] = this.unlockedHoldable;
             foreach (CosmeticStand cosmeticStand in this.instance.cosmeticStands)
             {
                 if (cosmeticStand != null)
