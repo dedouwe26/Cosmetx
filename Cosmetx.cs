@@ -1,11 +1,7 @@
-﻿using System;
-using System.Threading;
-using System.Reflection;
+﻿using System.Reflection;
 using BepInEx;
-using UnityEngine;
 using GorillaNetworking;
 using HarmonyLib;
-using UnityEngine.SceneManagement;
 
 namespace Cosmetx
 {
@@ -40,13 +36,12 @@ namespace Cosmetx
     }
 
     /// <summary>
-    /// mods main class
+    /// mod's main class
     /// </summary>
 
     [BepInPlugin("com.dedouwe26.gorillatag.cosmetx", "Cosmetx", "1.0.0")]
     public class Cosmetx : BaseUnityPlugin
     {
-        public static CosmeticsController cosmeticsControllerInstance;
         public static bool isUnlocked = false;
 
         void Awake()
@@ -54,31 +49,19 @@ namespace Cosmetx
             BepInEx.Logging.Logger.Sources.Remove(Logger);
             Logging.init();
         }
-        void Start()
-        {
-            // NOT HERE
-        }
 
         void OnEnable()
         {
             Logging.log.LogInfo("Plugin is enabled");
             Logging.log.LogMessage("Patching Now...");
             HarmonyPatches.ApplyHarmonyPatches();
-            // SceneManager.sceneLoaded += OnSceneLoaded;
         }
 
         void OnDisable()
         {
-            // SceneManager.sceneLoaded -= OnSceneLoaded;
             HarmonyPatches.RemoveHarmonyPatches();
-            cosmeticsControllerInstance.GetUserCosmeticsAllowed();
+            CosmeticsController.instance.GetUserCosmeticsAllowed();
         }
 
-        // void OnSceneLoaded(Scene s, LoadSceneMode sm)
-        // {
-        //     if (s.name == "GorillaTagSJR")
-        //     {
-        //     }
-        // }
     }
 }
