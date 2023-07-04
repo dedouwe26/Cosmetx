@@ -39,7 +39,8 @@ namespace Cosmetx
     /// mod's main class
     /// </summary>
 
-    [BepInPlugin("com.dedouwe26.gorillatag.cosmetx", "Cosmetx", "1.0.0")]
+    [BepInPlugin("com.dedouwe26.gorillatag.cosmetx", "Cosmetx", "1.2.1")]
+    [BepInDependency("org.legoandmars.gorillatag.utilla", "1.6.9")]
     public class Cosmetx : BaseUnityPlugin
     {
         public static bool isUnlocked = false;
@@ -60,7 +61,7 @@ namespace Cosmetx
         void OnDisable()
         {
             HarmonyPatches.RemoveHarmonyPatches();
-            CosmeticsController.instance.GetUserCosmeticsAllowed();
+            // CosmeticsController.instance.GetUserCosmeticsAllowed();
         }
 
     }

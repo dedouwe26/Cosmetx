@@ -56,7 +56,7 @@ namespace Cosmetx.Patches
                 {
                     PlayFabClientAPI.GetCatalogItems(new GetCatalogItemsRequest
                     {
-                        CatalogVersion = "DLC"
+                        CatalogVersion = CosmeticsController.instance.catalog
                     }, delegate (GetCatalogItemsResult result2)
                     {
                         this.unlockedCosmetics.Clear();
@@ -80,7 +80,7 @@ namespace Cosmetx.Patches
                                         tempStringArray = catalogItem.Bundle.BundledItems.ToArray();
                                     }
                                     uint cost;
-                                    if (catalogItem.VirtualCurrencyPrices.TryGetValue("SR", out cost))
+                                    if (catalogItem.VirtualCurrencyPrices.TryGetValue(CosmeticsController.instance.currencyName, out cost))
                                     {
                                         hasPrice = true;
                                     }
@@ -124,7 +124,6 @@ namespace Cosmetx.Patches
                                             bothHandsHoldable = this.allCosmetics[this.searchIndex].bothHandsHoldable,
                                             canTryOn = true
                                         };
-                                        Debug.Log(this.allCosmetics[this.searchIndex].itemName);
                                         this.allCosmetics[this.searchIndex] = this.tempItem;
                                         this.allCosmeticsDict[this.allCosmetics[this.searchIndex].itemName] = this.allCosmetics[this.searchIndex];
                                         this.allCosmeticsItemIDsfromDisplayNamesDict[this.allCosmetics[this.searchIndex].displayName] = this.allCosmetics[this.searchIndex].itemName;
@@ -254,10 +253,59 @@ namespace Cosmetx.Patches
     }
     [HarmonyPatch(typeof(VRRig))]
     [HarmonyPatch("IsItemAllowed", MethodType.Normal)]
-    internal class ItemAllowedPatch {
-        private static bool Prefix(ref bool __result)
+    internal class ItemAllowedPatch
+    {
+        private static bool Prefix(VRRig __instance, ref bool __result)
         {
             __result = true;
+            return false;
+        }
+    }
+    [HarmonyPatch(typeof(VRRig))]
+    [HarmonyPatch("GetUserCosmeticsAllowed", MethodType.Normal)]
+    internal class GetUserCosmeticsAllowedVRRig
+    {
+        
+        private class GetUserCosmeticsVRRig
+        {
+            VRRig instance;
+            string concatStringOfCosmeticsAllowed;
+            bool initializedCosmetics;
+            internal GetUserCosmeticsVRRig(VRRig instance, ref string concatStringOfCosmeticsAllowed, ref bool initializedCosmetics)
+            {
+                this.instance = instance;
+                this.concatStringOfCosmeticsAllowed = concatStringOfCosmeticsAllowed;
+                this.initializedCosmetics = initializedCosmetics;
+            }
+            internal void GetUserCosmeticsAllowedVRRig()
+            {
+                if (CosmeticsController.instance != null)
+                {
+                    PlayFabClientAPI.GetCatalogItems(new GetCatalogItemsRequest (), delegate (GetCatalogItemsResult result)
+                    {
+                        foreach (CatalogItem itemInstance in result.Catalog)
+                        {
+                            if (itemInstance.CatalogVersion == CosmeticsController.instance.catalog)
+                            {
+                                this.concatStringOfCosmeticsAllowed += itemInstance.ItemId;
+                            }
+                        }
+                        AccessTools.Method(typeof(VRRig), "CheckForEarlyAccess").Invoke(this.instance, null);
+                        this.instance.SetCosmeticsActive();
+                    }, delegate (PlayFabError error)
+                    {
+                        Debug.Log("Got error retrieving user data:");
+                        Debug.Log(error.GenerateErrorReport());
+                        this.initializedCosmetics = true;
+                        this.instance.SetCosmeticsActive();
+                    }, null, null);
+                }
+                this.concatStringOfCosmeticsAllowed += "Slingshot";
+            }
+        }
+        private static bool Prefix(VRRig __instance, ref string ___concatStringOfCosmeticsAllowed, ref bool ___initializedCosmetics)
+        {
+            new GetUserCosmeticsVRRig(__instance, ref ___concatStringOfCosmeticsAllowed, ref ___initializedCosmetics).GetUserCosmeticsAllowedVRRig();
             return false;
         }
     }
