@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 using BepInEx;
-using GorillaNetworking;
+
 using HarmonyLib;
 
 namespace Cosmetx
