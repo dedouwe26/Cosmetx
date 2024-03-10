@@ -142,35 +142,33 @@ namespace Cosmetx.Patches
                             }
                             this.unlockedCosmetics.Add(cosmeticItem);
                             if (cosmeticItem.itemCategory == CosmeticsController.CosmeticCategory.Hat && !this.unlockedHats.Contains(cosmeticItem))
-                            {
-                                this.unlockedHats.Add(cosmeticItem);
-                                this.itemLists[0].Add(cosmeticItem);
-                            }
-                            else if (cosmeticItem.itemCategory == CosmeticsController.CosmeticCategory.Face && !this.unlockedFaces.Contains(cosmeticItem))
-                            {
-                                this.unlockedFaces.Add(cosmeticItem);
-                                this.itemLists[1].Add(cosmeticItem);
-                            }
-                            else if (cosmeticItem.itemCategory == CosmeticsController.CosmeticCategory.Badge && !this.unlockedBadges.Contains(cosmeticItem))
-                            {
-                                this.unlockedBadges.Add(cosmeticItem);
-                                this.itemLists[2].Add(cosmeticItem);
-                            }
-                            else if (cosmeticItem.itemCategory == CosmeticsController.CosmeticCategory.Holdable && !this.unlockedHoldable.Contains(cosmeticItem))
-                            {
-                                this.unlockedHoldable.Add(cosmeticItem);
-                                this.itemLists[3].Add(cosmeticItem);
-                            }
-                            else if (cosmeticItem.itemCategory == CosmeticsController.CosmeticCategory.Gloves && !this.unlockedHoldable.Contains(cosmeticItem))
-                            {
-                                this.unlockedHoldable.Add(cosmeticItem);
-                                this.itemLists[3].Add(cosmeticItem);
-                            }
-                            else if (cosmeticItem.itemCategory == CosmeticsController.CosmeticCategory.Slingshot && !this.unlockedHoldable.Contains(cosmeticItem))
-                            {
-                                this.unlockedHoldable.Add(cosmeticItem);
-                                this.itemLists[3].Add(cosmeticItem);
-                            }
+    						{
+    							this.unlockedHats.Add(cosmeticItem);
+    						}
+    						else if (cosmeticItem.itemCategory == CosmeticsController.CosmeticCategory.Face && !this.unlockedFaces.Contains(cosmeticItem))
+    						{
+    							this.unlockedFaces.Add(cosmeticItem);
+    						}
+    						else if (cosmeticItem.itemCategory == CosmeticsController.CosmeticCategory.Badge && !this.unlockedBadges.Contains(cosmeticItem))
+    						{
+    							this.unlockedBadges.Add(cosmeticItem);
+    						}
+    						else if (cosmeticItem.itemCategory == CosmeticsController.CosmeticCategory.Skin && !this.unlockedBadges.Contains(cosmeticItem))
+    						{
+    							this.unlockedBadges.Add(cosmeticItem);
+    						}
+    						else if (cosmeticItem.itemCategory == CosmeticsController.CosmeticCategory.Holdable && !this.unlockedHoldable.Contains(cosmeticItem))
+    						{
+    							this.unlockedHoldable.Add(cosmeticItem);
+    						}
+    						else if (cosmeticItem.itemCategory == CosmeticsController.CosmeticCategory.Gloves && !this.unlockedHoldable.Contains(cosmeticItem))
+    						{
+    							this.unlockedHoldable.Add(cosmeticItem);
+    						}
+    						else if (cosmeticItem.itemCategory == CosmeticsController.CosmeticCategory.Slingshot && !this.unlockedHoldable.Contains(cosmeticItem))
+    						{
+    							this.unlockedHoldable.Add(cosmeticItem);
+    						}
                             this.concatStringCosmeticsAllowed += cosmeticItem.itemName;
                         }
                         foreach (CosmeticStand cosmeticStand in this.instance.cosmeticStands)
