@@ -2,7 +2,7 @@ using System;
 using Photon.Pun;
 using HarmonyLib;
 
-namespace Cosmetx.Patches
+namespace Cosmetx
 {
     [HarmonyPatch(typeof(PhotonView), "RPC", new Type[] { typeof(string), typeof(RpcTarget), typeof(object[]) })]
     internal class PhotonViewPatch

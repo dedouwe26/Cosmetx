@@ -5,13 +5,14 @@ using HarmonyLib;
 
 namespace Cosmetx
 {
+    
     public class HarmonyPatches
     {
         private static Harmony instance;
 
         public static bool IsPatched { get; private set; }
+        
         public const string InstanceId = "com.dedouwe26.gorillatag.cosmetx";
-
         internal static void ApplyHarmonyPatches()
         {
             if (instance == null)
@@ -39,8 +40,7 @@ namespace Cosmetx
     /// mod's main class
     /// </summary>
 
-    [BepInPlugin("com.dedouwe26.gorillatag.cosmetx", "Cosmetx", "1.2.1")]
-    [BepInDependency("org.legoandmars.gorillatag.utilla", "1.6.9")]
+    [BepInPlugin(HarmonyPatches.InstanceId, "Cosmetx", "1.2.1")]
     public class Cosmetx : BaseUnityPlugin
     {
         public static bool isUnlocked = false;
@@ -61,7 +61,6 @@ namespace Cosmetx
         void OnDisable()
         {
             HarmonyPatches.RemoveHarmonyPatches();
-            // CosmeticsController.instance.GetUserCosmeticsAllowed();
         }
 
     }
