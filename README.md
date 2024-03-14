@@ -1,4 +1,4 @@
-"NOTE: there won't be a pre-compiled mod, so you will have to compile it yourself!" \
+"NOTE: there won't be a pre-compiled mod, so you will have to compile it yourself!" 
 # Cosmetx
 This allows you to gain access to all cosmetics, including the unobtainable ones! <br />
 `Client-side only!`
