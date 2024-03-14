@@ -1,4 +1,5 @@
-# Cosmetx
+"NOTE: there won't be a pre-compiled mod, so you will have to compile it yourself!"
+BV# Cosmetx
 This allows you to gain access to all cosmetics, including the unobtainable ones! <br />
 `Client-side only!`
 
