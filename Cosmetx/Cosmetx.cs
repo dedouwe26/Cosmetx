@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using BepInEx;
 
 using HarmonyLib;
@@ -41,6 +41,7 @@ namespace Cosmetx
     /// </summary>
 
     [BepInPlugin(HarmonyPatches.InstanceId, "Cosmetx", "1.2.1")]
+    [BepInDependency("org.legoandmars.gorillatag.utilla", "1.6.13")]
     public class Cosmetx : BaseUnityPlugin
     {
         public static bool isUnlocked = false;
