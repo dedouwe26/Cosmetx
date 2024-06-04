@@ -1,4 +1,5 @@
-"NOTE: there won't be a pre-compiled mod, so you will have to compile it yourself!" 
+`IF anyone desides to publish a build of Cosmetx, I will archive this repo, and no fixes will be made publicly.`
+
 # Cosmetx 🧢
 This allows you to gain access to all cosmetics, including the unobtainable ones! <br />
 `Client-side only!`
