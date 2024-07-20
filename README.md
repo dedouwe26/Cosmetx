@@ -1,4 +1,4 @@
-`IF anyone desides to publish a build of Cosmetx, I will archive this repo, and no fixes will be made publicly.`
+`Thanks! For everyone that supported this little mod, we have hit more than 10,000 VIEWS! For everyone that still wants a new update, there is a small chance that there will be one. Anyways, thanks alot!`
 
 # Cosmetx 🧢
 This allows you to gain access to all cosmetics, including the unobtainable ones! <br />
