@@ -3,6 +3,8 @@ using System.Reflection;
 using BepInEx;
 using GorillaNetworking;
 using HarmonyLib;
+using PlayFab;
+using PlayFab.ClientModels;
 
 namespace Cosmetx
 {
@@ -10,6 +12,8 @@ namespace Cosmetx
         private static Harmony? instance;
 
         public static bool IsPatched { get; private set; }
+
+        // private static readonly Assembly[] assemblies = [typeof(CosmeticsController).Assembly, typeof(PlayFabClientAPI).Assembly]
         
         public const string InstanceId = "com.dedouwe26.gorillatag.cosmetx";
         internal static void ApplyPatches()
@@ -17,7 +21,7 @@ namespace Cosmetx
             instance ??= new Harmony(InstanceId);
             if (!IsPatched)
             {
-                instance.PatchAll(Assembly.GetExecutingAssembly());
+                instance.PatchAll(typeof(Cosmetx).Assembly);
                 IsPatched = true;
             }
         }
@@ -40,6 +44,11 @@ namespace Cosmetx
     [BepInDependency("org.legoandmars.gorillatag.utilla", "1.6.14")]
     public class Cosmetx : BaseUnityPlugin {
         public static BepInEx.Logging.ManualLogSource? Log;
+        private static string? catalogName;
+        public static string CatalogName { get {
+            catalogName ??= CosmeticsController.instance?.catalog ?? "DLC";
+            return catalogName;
+        } }
         private static string? currencyName;
         public static string CurrencyName { get {
             if (currencyName == null) {
@@ -67,21 +76,22 @@ namespace Cosmetx
         }
 
         public void OnEnable() {
-            Log?.LogInfo("Plugin is enabled");
-            if (!Patcher.IsPatched) {
-                Patcher.ApplyPatches();
-                CosmeticsController.instance?.GetCosmeticsPlayFabCatalogData();
-                CosmeticsController.instance?.SetHideCosmeticsFromRemotePlayers(true);
-            }
+            // Log?.LogInfo("Plugin is enabled ------------");
+
+            // if (!Patcher.IsPatched) {
+            //     Patcher.ApplyPatches();
+            //     CosmeticsController.instance?.GetCosmeticsPlayFabCatalogData();
+            //     CosmeticsController.instance?.SetHideCosmeticsFromRemotePlayers(true);
+            // }
         }
 
         public void OnDisable() {
-            Log?.LogInfo("Plugin is disabled");
-            if (Patcher.IsPatched) {
-                Patcher.RemovePatches();
-                CosmeticsController.instance?.GetCosmeticsPlayFabCatalogData();
-                CosmeticsController.instance?.SetHideCosmeticsFromRemotePlayers(false);
-            }
+            // Log?.LogInfo("Plugin is disabled");
+            // if (Patcher.IsPatched) {
+            //     Patcher.RemovePatches();
+            //     CosmeticsController.instance?.GetCosmeticsPlayFabCatalogData();
+            //     CosmeticsController.instance?.SetHideCosmeticsFromRemotePlayers(false);
+            // }
                 
         }
 

@@ -12,7 +12,7 @@ namespace Cosmetx.Patches
     internal class UserInventoryPatch {
         private static bool Prefix(GetUserInventoryRequest request, Action<GetUserInventoryResult> resultCallback, Action<PlayFabError> errorCallback, object customData, Dictionary<string, string> extraHeaders) {
             Cosmetx.Log?.LogDebug("Called!!!!!!!!!!!!!!!!!!!!!!!!!!");
-            PlayFabClientAPI.GetCatalogItems(new GetCatalogItemsRequest { CatalogVersion = CosmeticsController.instance.catalog },
+            PlayFabClientAPI.GetCatalogItems(new GetCatalogItemsRequest { CatalogVersion = Cosmetx.CatalogName },
                 (GetCatalogItemsResult result) => {
                     GetUserInventoryResult getUserInventoryResult = new() {
                         Inventory = result.Catalog.Select((CatalogItem item) => {
