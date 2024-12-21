@@ -1,24 +1,20 @@
+using System;
 using System.Reflection;
 using BepInEx;
-
+using GorillaNetworking;
 using HarmonyLib;
 
 namespace Cosmetx
 {
-    
-    public class HarmonyPatches
-    {
-        private static Harmony instance;
+    public class Patcher : IDisposable {
+        private static Harmony? instance;
 
         public static bool IsPatched { get; private set; }
         
         public const string InstanceId = "com.dedouwe26.gorillatag.cosmetx";
-        internal static void ApplyHarmonyPatches()
+        internal static void ApplyPatches()
         {
-            if (instance == null)
-            {
-                instance = new Harmony(InstanceId);
-            }
+            instance ??= new Harmony(InstanceId);
             if (!IsPatched)
             {
                 instance.PatchAll(Assembly.GetExecutingAssembly());
@@ -26,7 +22,7 @@ namespace Cosmetx
             }
         }
 
-        internal static void RemoveHarmonyPatches()
+        internal static void RemovePatches()
         {
             if (instance != null && IsPatched)
             {
@@ -34,34 +30,59 @@ namespace Cosmetx
                 IsPatched = false;
             }
         }
+
+        public void Dispose() {
+            RemovePatches();
+        }
     }
 
-    /// <summary>
-    /// mod's main class
-    /// </summary>
+    [BepInPlugin(Patcher.InstanceId, "Cosmetx", "1.2.2")]
+    [BepInDependency("org.legoandmars.gorillatag.utilla", "1.6.14")]
+    public class Cosmetx : BaseUnityPlugin {
+        public static BepInEx.Logging.ManualLogSource? Log;
+        private static string? currencyName;
+        public static string CurrencyName { get {
+            if (currencyName == null) {
+                if (CosmeticsController.instance != null) {
+                    try {
+                        currencyName = (string?)CosmeticsController.instance.GetType().GetField("currencyName", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(CosmeticsController.instance);
+                    } catch { }
+                }
+                currencyName ??= "SR";
+            }
+            return currencyName;
+        } }
 
-    [BepInPlugin(HarmonyPatches.InstanceId, "Cosmetx", "1.2.1")]
-    [BepInDependency("org.legoandmars.gorillatag.utilla", "1.6.13")]
-    public class Cosmetx : BaseUnityPlugin
-    {
-        public static bool isUnlocked = false;
-
-        void Awake()
-        {
-            BepInEx.Logging.Logger.Sources.Remove(Logger);
-            Logging.init();
+        public void Awake() {
+            Log = Logger;
+            Log.LogMessage("Patching Now...");
+            Patcher.ApplyPatches();
+            CosmeticsController.instance?.SetHideCosmeticsFromRemotePlayers(true);
+            enabled = true;
+            // MethodInfo unlockItem = typeof(CosmeticsController).GetMethod("UnlockItem", BindingFlags.NonPublic | BindingFlags.Instance);
+            // foreach (string cosmetic in controller.allCosmeticsDict.Keys) {
+            //     unlockItem.Invoke(CosmeticsController.instance, new object[] {cosmetic});
+            // }
+            
         }
 
-        void OnEnable()
-        {
-            Logging.log.LogInfo("Plugin is enabled");
-            Logging.log.LogMessage("Patching Now...");
-            HarmonyPatches.ApplyHarmonyPatches();
+        public void OnEnable() {
+            Log?.LogInfo("Plugin is enabled");
+            if (!Patcher.IsPatched) {
+                Patcher.ApplyPatches();
+                CosmeticsController.instance?.GetCosmeticsPlayFabCatalogData();
+                CosmeticsController.instance?.SetHideCosmeticsFromRemotePlayers(true);
+            }
         }
 
-        void OnDisable()
-        {
-            HarmonyPatches.RemoveHarmonyPatches();
+        public void OnDisable() {
+            Log?.LogInfo("Plugin is disabled");
+            if (Patcher.IsPatched) {
+                Patcher.RemovePatches();
+                CosmeticsController.instance?.GetCosmeticsPlayFabCatalogData();
+                CosmeticsController.instance?.SetHideCosmeticsFromRemotePlayers(false);
+            }
+                
         }
 
     }

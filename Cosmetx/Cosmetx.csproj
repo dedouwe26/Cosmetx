@@ -2,8 +2,12 @@
 
   <PropertyGroup>
 	  <TargetFramework>netstandard2.1</TargetFramework>
+    <nullable>enable</nullable>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
-
+  <Target Name="AfterBuild">
+    <Copy SourceFiles="$(OutputPath)/Cosmetx.dll" DestinationFolder="$(PluginsPath)" />
+  </Target>
   <ItemGroup>
     <EmbeddedResource Include="../LICENSE" />
   </ItemGroup>
