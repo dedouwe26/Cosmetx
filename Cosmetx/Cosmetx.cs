@@ -76,7 +76,7 @@ namespace Cosmetx
         }
 
         public void OnEnable() {
-            // Log?.LogInfo("Plugin is enabled ------------");
+            // Log?.LogInfo("Plugin is enabled");
 
             // if (!Patcher.IsPatched) {
             //     Patcher.ApplyPatches();

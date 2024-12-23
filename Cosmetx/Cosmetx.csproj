@@ -5,9 +5,13 @@
     <nullable>enable</nullable>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
-  <Target Name="AfterBuild">
-    <Copy SourceFiles="$(OutputPath)/Cosmetx.dll" DestinationFolder="$(PluginsPath)" />
+
+  <Target Name="AfterBuild" AfterTargets="Build">
+    <Message Text="Executing - Move $(ProjectName) to plugin folder $(PluginsPath)." Importance="High" />
+    <Copy SourceFiles="$(TargetDir)$(ProjectName).dll" DestinationFolder="$(PluginsPath)" />
+    <Message Text="Done - Moving $(ProjectName)." Importance="High" />
   </Target>
+  
   <ItemGroup>
     <EmbeddedResource Include="../LICENSE" />
   </ItemGroup>
