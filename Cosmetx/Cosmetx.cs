@@ -38,7 +38,7 @@ namespace Cosmetx
 
     public sealed class Cosmetx : MonoBehaviour {
         public const string ID = "com.oxded.gorillatag.cosmetx";
-        public const string Version = "1.2.2";
+        public const string Version = "1.3.0";
         public const string Name = "Cosmetx";
         public const string Owner = "0xDED";
         public const string License = "MIT License";
