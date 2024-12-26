@@ -1,35 +1,31 @@
 using System;
-using System.Reflection;
-using BepInEx;
+using BepInEx.Logging;
+using ExitGames.Client.Photon.StructWrapping;
 using GorillaNetworking;
 using HarmonyLib;
-using PlayFab;
-using PlayFab.ClientModels;
+using UnityEngine;
 
 namespace Cosmetx
 {
-    public class Patcher : IDisposable {
+    public sealed class Patcher : IDisposable {
         private static Harmony? instance;
 
         public static bool IsPatched { get; private set; }
 
-        // private static readonly Assembly[] assemblies = [typeof(CosmeticsController).Assembly, typeof(PlayFabClientAPI).Assembly]
-        
-        public const string InstanceId = "com.dedouwe26.gorillatag.cosmetx";
-        internal static void ApplyPatches()
-        {
-            instance ??= new Harmony(InstanceId);
-            if (!IsPatched)
-            {
-                instance.PatchAll(typeof(Cosmetx).Assembly);
+        internal static void ApplyPatches() {
+            Cosmetx.Log?.LogInfo($"{Cosmetx.Name} - Patching");
+
+            instance ??= new Harmony(Cosmetx.ID);
+            if (!IsPatched) {
+                instance.PatchAll(Loader.PluginAssembly);
                 IsPatched = true;
             }
         }
 
-        internal static void RemovePatches()
-        {
-            if (instance != null && IsPatched)
-            {
+        internal static void RemovePatches() {
+            Cosmetx.Log?.LogInfo($"{Cosmetx.Name} - Removing patches");
+
+            if (instance != null && IsPatched) {
                 instance.UnpatchSelf();
                 IsPatched = false;
             }
@@ -40,10 +36,14 @@ namespace Cosmetx
         }
     }
 
-    [BepInPlugin(Patcher.InstanceId, "Cosmetx", "1.2.2")]
-    [BepInDependency("org.legoandmars.gorillatag.utilla", "1.6.14")]
-    public class Cosmetx : BaseUnityPlugin {
-        public static BepInEx.Logging.ManualLogSource? Log;
+    public sealed class Cosmetx : MonoBehaviour {
+        public const string ID = "com.oxded.gorillatag.cosmetx";
+        public const string Version = "1.2.2";
+        public const string Name = "Cosmetx";
+        public const string Owner = "0xDED";
+        public const string License = "MIT License";
+
+        public static ManualLogSource? Log;
         private static string? catalogName;
         public static string CatalogName { get {
             catalogName ??= CosmeticsController.instance?.catalog ?? "DLC";
@@ -54,7 +54,7 @@ namespace Cosmetx
             if (currencyName == null) {
                 if (CosmeticsController.instance != null) {
                     try {
-                        currencyName = (string?)CosmeticsController.instance.GetType().GetField("currencyName", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(CosmeticsController.instance);
+                        currencyName = Traverse.Create(CosmeticsController.instance)?.Field("currencyName")?.GetValue() as string;
                     } catch { }
                 }
                 currencyName ??= "SR";
@@ -62,36 +62,38 @@ namespace Cosmetx
             return currencyName;
         } }
 
-        public void Awake() {
-            Log = Logger;
-            Log.LogMessage("Patching Now...");
-            Patcher.ApplyPatches();
-            CosmeticsController.instance?.SetHideCosmeticsFromRemotePlayers(true);
-            enabled = true;
-            // MethodInfo unlockItem = typeof(CosmeticsController).GetMethod("UnlockItem", BindingFlags.NonPublic | BindingFlags.Instance);
-            // foreach (string cosmetic in controller.allCosmeticsDict.Keys) {
-            //     unlockItem.Invoke(CosmeticsController.instance, new object[] {cosmetic});
-            // }
-            
+        void Awake() {
+            Log = BepInEx.Logging.Logger.CreateLogSource(Name);
+            Log.LogMessage($"{Name} {Version} by {Owner}. Under the {License}.");
+        }
+        void Start() {
+            Log?.LogMessage($"{Name} - Started");
         }
 
-        public void OnEnable() {
-            // Log?.LogInfo("Plugin is enabled");
-
-            // if (!Patcher.IsPatched) {
-            //     Patcher.ApplyPatches();
-            //     CosmeticsController.instance?.GetCosmeticsPlayFabCatalogData();
-            //     CosmeticsController.instance?.SetHideCosmeticsFromRemotePlayers(true);
-            // }
+        private void PokeWardrobes() {
+            foreach (CosmeticWardrobe wardrobe in FindObjectsOfType<CosmeticWardrobe>()) {
+                AccessTools.Method(wardrobe.GetType(), "HandleCosmeticsUpdated").Invoke(wardrobe, []);
+            }
         }
 
-        public void OnDisable() {
-            // Log?.LogInfo("Plugin is disabled");
-            // if (Patcher.IsPatched) {
-            //     Patcher.RemovePatches();
-            //     CosmeticsController.instance?.GetCosmeticsPlayFabCatalogData();
-            //     CosmeticsController.instance?.SetHideCosmeticsFromRemotePlayers(false);
-            // }
+        void OnEnable() {
+            Log?.LogMessage($"{Name} - Enabled");
+            if (!Patcher.IsPatched) {
+                Patcher.ApplyPatches();
+                CosmeticsController.instance?.GetCosmeticsPlayFabCatalogData();
+                CosmeticsController.instance?.SetHideCosmeticsFromRemotePlayers(true);
+                PokeWardrobes();
+            }
+        }
+
+        void OnDisable() {
+            Log?.LogMessage($"{Name} - Disabled");
+            if (Patcher.IsPatched) {
+                Patcher.RemovePatches();
+                CosmeticsController.instance?.GetCosmeticsPlayFabCatalogData();
+                CosmeticsController.instance?.SetHideCosmeticsFromRemotePlayers(false);
+                PokeWardrobes();
+            }
                 
         }
 

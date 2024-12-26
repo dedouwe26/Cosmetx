@@ -1,15 +1,15 @@
 # Cosmetx 🧢
 This allows you to gain access to all cosmetics, including the unobtainable ones! <br />
 `Client-side only!`
-## Requires 📦
-Utilla 1.6.14
-## How it works! ⚙️
-In DnSpy you can find out where the cosmetics are handled. <br />
-So in GorillaNetworking.CosmeticsController.GetUserCosmeticsAllowed() you can apply a patch that gives you all cosmetics.
 
 ## How to build! 🔨
-First you will need to install an .NET Core SDK or framework <br />
-Then you download the project and change in the `Directory.Build.props` the Game path. <br />
-Then you run the `dotnet build` command and the DLL file is in `bin/Debug/netstandard2/Cosmetx.dll` <br />
-If you get an error, you will need to run `dotnet restore` first.
+1. I suggest you to install an [.NET SDK](https://dotnet.microsoft.com/en-us/download) or any .NET implementation that supports [.NET Standard 2.1](https://learn.microsoft.com/en-us/dotnet/standard/net-standard?tabs=net-standard-2-1). <br />
+2. Then you download the project and change in the `Directory.Build.props` the Game path. <br />
+3. Then you run the `dotnet build` command. After it is done building, the plugin should be in `Cosmetx/bin/Debug/netstandard2.1/Cosmetx.dll`
+- If you get an **error**, you can run `dotnet restore` first.
+
+## Troubleshooting! 🪲
+ - If the logs in: `Gorilla Tag/BepInEx/LogOutput.log` show `[Message:   Cosmetx] Cosmetx - Disabled` somewhere at the beginning. Change `HideManagerGameObject` under the `Chainloader` group to `true`.
+
+Under the [MIT license](LICENSE).
 

@@ -4,14 +4,12 @@
 	  <TargetFramework>netstandard2.1</TargetFramework>
     <nullable>enable</nullable>
     <LangVersion>latest</LangVersion>
+    <version>1.2.2</version>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <OptimizationPreference>Speed</OptimizationPreference>
+    <OutputType>Library</OutputType>
   </PropertyGroup>
 
-  <Target Name="AfterBuild" AfterTargets="Build">
-    <Message Text="Executing - Move $(ProjectName) to plugin folder $(PluginsPath)." Importance="High" />
-    <Copy SourceFiles="$(TargetDir)$(ProjectName).dll" DestinationFolder="$(PluginsPath)" />
-    <Message Text="Done - Moving $(ProjectName)." Importance="High" />
-  </Target>
-  
   <ItemGroup>
     <EmbeddedResource Include="../LICENSE" />
   </ItemGroup>
@@ -281,9 +279,6 @@
     <Reference Include="UnityEngine.XRModule">
       <HintPath>$(GameAssemblyPath)\UnityEngine.XRModule.dll</HintPath>
     </Reference>
-    <!-- <Reference Include="Utilla">
-      <HintPath>$(PluginsPath)\Utilla\Utilla.dll</HintPath>
-    </Reference> -->
     <Reference Include="websocket-sharp">
       <HintPath>$(GameAssemblyPath)\websocket-sharp.dll</HintPath>
     </Reference>

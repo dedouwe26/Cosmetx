@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Project>
+	<Target Name="CopyToPlugins" AfterTargets="Build" Condition="'$(CI)'!='TRUE'">
+		<Message Text="Executing - Moving $(ProjectName) to the plugins folder." Importance="high"/>
+		<Copy SourceFiles="$(TargetPath)" DestinationFiles="$(PluginsPath)\$(ProjectName)\$(TargetFileName)" />
+		<Message Text="Done - Moving $(ProjectName) to plugins." Importance="high"/>
+	</Target>
+</Project>

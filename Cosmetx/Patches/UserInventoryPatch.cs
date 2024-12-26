@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using GorillaNetworking;
 using HarmonyLib;
 using PlayFab;
 using PlayFab.ClientModels;
@@ -10,8 +9,8 @@ namespace Cosmetx.Patches
 {
     [HarmonyPatch(typeof(PlayFabClientAPI), nameof(PlayFabClientAPI.GetUserInventory))]
     internal class UserInventoryPatch {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "Required for Harmony patching.")]
         private static bool Prefix(GetUserInventoryRequest request, Action<GetUserInventoryResult> resultCallback, Action<PlayFabError> errorCallback, object customData, Dictionary<string, string> extraHeaders) {
-            Cosmetx.Log?.LogDebug("Called!!!!!!!!!!!!!!!!!!!!!!!!!!");
             PlayFabClientAPI.GetCatalogItems(new GetCatalogItemsRequest { CatalogVersion = Cosmetx.CatalogName },
                 (GetCatalogItemsResult result) => {
                     GetUserInventoryResult getUserInventoryResult = new() {
