@@ -9,7 +9,7 @@ This allows you to gain access to all cosmetics, including the unobtainable ones
 - If you get an **error**, you can run `dotnet restore` first.
 
 ## Troubleshooting! 🪲
- - If the logs in: `Gorilla Tag/BepInEx/LogOutput.log` show `[Message:   Cosmetx] Cosmetx - Disabled` somewhere at the beginning. Change `HideManagerGameObject` under the `Chainloader` group to `true`.
+ - If the logs in: `Gorilla Tag/BepInEx/LogOutput.log` show `[Message:   Cosmetx] Cosmetx - Disabled` without doing anything. Change `HideManagerGameObject` in `Gorilla Tag/BepInEx/config/BepInEx.cfg` under the `Chainloader` group to `true`.
 
 Under the [MIT license](LICENSE).
 
