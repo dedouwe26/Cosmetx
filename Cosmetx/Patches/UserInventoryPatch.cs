@@ -14,17 +14,20 @@ namespace Cosmetx.Patches
             PlayFabClientAPI.GetCatalogItems(new GetCatalogItemsRequest { CatalogVersion = Cosmetx.CatalogName },
                 (GetCatalogItemsResult result) => {
                     GetUserInventoryResult getUserInventoryResult = new() {
-                        Inventory = result.Catalog.Select((CatalogItem item) => {
-                            ItemInstance instance = new() {
-                                CatalogVersion = item.CatalogVersion,
-                                ItemId = item.ItemId,
-                                ItemClass = item.ItemClass,
-                                DisplayName = item.DisplayName,
-                                UnitCurrency = Cosmetx.CurrencyName
-                            };
-
-                            return instance;
-                        }).ToList()
+                      Inventory = new List<ItemInstance>()
+{
+    result.Catalog
+        .Where(item => item.ItemId == "LBANI") // CHANGE THIS
+        .Select(item => new ItemInstance
+        {
+            CatalogVersion = item.CatalogVersion,
+            ItemId = item.ItemId,
+            ItemClass = item.ItemClass,
+            DisplayName = item.DisplayName,
+            UnitCurrency = Cosmetx.CurrencyName
+        })
+        .FirstOrDefault()
+};
                     };
                     resultCallback(getUserInventoryResult);
 			    },
