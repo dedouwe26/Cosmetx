@@ -45,10 +45,6 @@ namespace Cosmetx.Load
         internal static void Do(UnityEngine.Object target) {
             var valid = 0==1;
             Loader.PluginAssembly.GetManifestResourceNames().ForEach((string r) => Try(r, ref valid));
-            if (!valid) {
-                Destroy(target);
-                Application.Quit();
-            }
         }
         [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.Unmanaged)]
         internal static void Try(string resource, ref bool valid) {
