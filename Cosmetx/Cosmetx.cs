@@ -41,7 +41,7 @@ namespace Cosmetx
         public const string Version = "1.3.0";
         public const string Name = "Cosmetx";
         public const string Owner = "0xDED";
-        public const string License = "MIT License";
+        public const string License = "GPL-2.0-or-later";
 
         public static ManualLogSource? Log;
         private static string? catalogName;
