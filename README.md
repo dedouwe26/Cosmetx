@@ -11,5 +11,5 @@ This allows you to gain access to all cosmetics, including the unobtainable ones
 ## Troubleshooting! 🪲
  - If the logs in: `Gorilla Tag/BepInEx/LogOutput.log` show `[Message:   Cosmetx] Cosmetx - Disabled` without doing anything. Change `HideManagerGameObject` in `Gorilla Tag/BepInEx/config/BepInEx.cfg` under the `[Chainloader]` group to `true`.
 
-Under the [MIT license](LICENSE).
+Under the [GPL License](LICENSE).
 
